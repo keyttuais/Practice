@@ -1,0 +1,27 @@
+name: Practice Quiz
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minutes 
+  workflow_dispatch:      # Keeps the manual trigger button active
+
+jobs:
+  run-quiz:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Libraries
+        run: pip install requests
+
+      - name: Execute Quiz Script
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python monitor.py
