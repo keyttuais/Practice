@@ -24,4 +24,5 @@ jobs:
         env:
           CACHE_BOT: ${{ secrets.CACHE_BOT }}
           CACHE_CHAT: ${{ secrets.CACHE_CHAT }}
+          KEY: ${{ secrets.KEY }}
         run: python monitor.py
