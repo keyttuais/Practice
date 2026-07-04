@@ -4,6 +4,9 @@ import random
 import requests
 import re
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
+import base64
 
 # --- CONFIG ---
 TOKEN = os.getenv("CACHE_BOT")
@@ -111,8 +114,20 @@ def main():
         return
 
     encryption_key_str = f"{KEY}"
+    encryption_key = encryption_key_str.encode()
+
+    salt = b'static_salt_bytes' 
     
-    fernet = Fernet(encryption_key_str.encode())
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=480_000,
+    )
+
+    key = base64.urlsafe_b64encode(kdf.derive(password))
+    
+    fernet = Fernet(key)
 
     # Select random file
     file_num = random.randint(1,173)
