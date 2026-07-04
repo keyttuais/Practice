@@ -111,10 +111,10 @@ def main():
         print("Error: TELEGRAM_TOKEN or CHAT_ID environment variables are missing.")
         return
 
-    encryption_key_str = b"{KEY}"
-    encryption_key = encryption_key_str.encode()
+    encryption_key_str = os.getenv("KEY")
+    #encryption_key = encryption_key_str.encode()
 
-    fernet = Fernet(encryption_key)
+    fernet = Fernet(encryption_key_str)
 
     # Select random file
     file_num = random.randint(1,173)
